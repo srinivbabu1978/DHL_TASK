@@ -1,0 +1,390 @@
+from tkinter import *
+import tkinterweb
+import tkhtmlview
+from tkhtmlview import HTMLLabel
+import os
+from customtkinter import *
+import tkinterweb.htmlwidgets
+from tkhtmlview import HTMLText, RenderHTML
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QVBoxLayout, QWidget, QPushButton
+#import webview
+import webbrowser
+import sys
+#import tkinter as tk
+from tkinter import messagebox, Tk
+from subprocess import TimeoutExpired
+from PIL import Image
+
+arg1 = sys.argv[1] 
+#print("START....")
+try:
+    with open("C:/HealthCheck/chatbotui/temp.tmp", "r") as file:
+       line = file.readline()
+       while line:
+          #SKV print(line, end='')
+          line = file.readline()
+except:
+    print("Temp File doesn't exist")
+
+print(arg1)
+varnum = 1
+
+
+class App(CTk):
+    def __init__(self):
+        super().__init__()
+        
+        #self.iconify()
+        #self.after(1000, self.deiconify)
+        #self.after(2000, self.destroy)
+        
+        self.title("Pre-Flight Check")
+        self.geometry("760x570+450+60")
+        self.config(bg="#f8f9f9")
+        global formrow  
+        formrow = 0
+        self.WelcomeLabel=CTkLabel(self, text="Welcome "+os. getlogin(), fg_color="#f8f9f9")  
+        self.WelcomeLabel.grid(row=formrow, column=0,padx=20, pady=20)
+        formrow = formrow + 1
+        
+
+        self.seperationframe1 = CTkFrame(self, height = 40,width=690, corner_radius=0)
+        self.seperationframe1.grid(row=formrow, column=0, columnspan=4, sticky="w",padx=8, pady=4)
+                       
+            
+        #self.healthLabel=CTkLabel(self, text="Run Health Check")  
+        #self.healthLabel.grid(row=formrow, column=0)
+        
+        def starthealthcheck():
+            #self.healthLabel.configure(text ="  Running Health Check. Please wait for a moment! ")
+            #self.seperationframe2.grid_forget()
+            #self.Chatbotlabel.grid_forget()
+            #self.Chatbotbutton.grid_forget()
+            #self.healthLabelbutton.grid_forget()
+            self.geometry("760x570+450+60")
+            global varnum
+            
+            self.progressbarlabel = CTkProgressBar(self)
+            self.progressbarlabel.grid(row=1, column=3)
+            self.progressbarlabel.configure(mode="indeterminnate")
+            
+            
+            if ((arg1 != "start") and (arg1 != "rerun")):                
+                varnum+=1
+                self.healthLabel.configure(text ="  Healthcheck initiated ", fg_color="#f8f9f9")
+                #skvcheck self.destroy()
+                #skvcheck self.deiconify()
+                if varnum >= 2:
+                    self.healthLabelbutton.grid_forget()
+                    self.progressbarlabel.grid(row=1, column=3)
+                else:
+                    self.progressbarlabel.grid_forget()
+                    varnum+=1    
+            else:
+                self.healthLabelbutton.grid_forget()
+                #self.healthLabel.grid_forget()
+                #self.healthLabel1=CTkLabel(self, text="Running Health Check. Please wait for a moment!")  
+                #self.healthLabel1.grid(row=formrow, column=0)
+                self.healthLabel.configure(text ="Running Health Check. Please wait for a moment! ", fg_color="#f8f9f9")
+                self.healthLabel.grid(row=1, column=0, sticky="w",padx=8, pady=4)
+                self.progressbarlabel.start()
+                self.progressbarlabel.grid(row=1, column=3)
+                self.progressbarlabel.configure(mode="indeterminnate")
+                
+                
+                        
+            import subprocess,time
+            #time.sleep(1)
+            #messagebox.showinfo("Info", arg1)
+            
+            filepath="C:/HealthCheck/chatbotui/abc.bat"
+            #SKV p = subprocess.Popen(filepath, shell=True, stdout = subprocess.PIPE)
+            proc = subprocess.Popen(filepath, shell=True)
+            '''try:
+                outs, errs = proc.communicate(timeout=0)
+            except TimeoutExpired:
+                proc.stdout.close()
+                proc.kill()
+                outs, errs = proc.communicate()
+            '''
+        
+                
+        if ((arg1 != "start") and (arg1 != "rerun")):
+            '''
+            self.healthLabel=CTkLabel(self, text="Healthcheck Initiated", fg_color="#d6eaf8")  
+            self.healthLabel.grid(row=formrow, column=0)
+            self.healthLabelbutton=CTkButton(self, text="Run",command=starthealthcheck)  
+            self.healthLabelbutton.grid(row=formrow, column=2, columnspan=2)
+            formrow=formrow+1
+            '''
+                          
+            #START
+            ###############START#################
+            ###START1 - READ TRIGGER AND STORE IN LIST#######
+            my_file = open("C:/HealthCheck/chatbotui/temptrig.tmp", "r") 
+            # reading the file 
+            data = my_file.read() 
+            # replacing end splitting the text  
+            # when newline ('\n') is seen. 
+            data_into_list = data.split("\n") 
+            my_file.close() 
+            ###END1
+            
+            with open("C:/HealthCheck/chatbotui/temp.tmp", "r") as file:
+                   line = file.readline()
+                   print("LINE START")
+                   i=0
+                   j=0
+                   print(i)
+                   print("LINE END")
+                   
+                   def VerifyForm(rown):
+                            print("SKV-ROWNUM in verify :")
+                            print(rown)
+                            
+                            if rown == 1: 
+                                lindetails="Operating System Up-to-Date"
+                            elif rown == 2:  
+                                lindetails="Reboot Status"
+                            elif rown == 3:    
+                                lindetails="Outlook Is In Offline Mode"
+                            elif rown == 4:    
+                                lindetails="Encryption StatusAD"
+                            elif rown == 5:    
+                                lindetails="Password Expiration"
+                            elif rown == 6:    
+                                lindetails="Low Available Disk Space"
+                            
+                            self.seperationframe3 = CTkFrame(self, height = 40,width=690, corner_radius=0)
+                            self.seperationframe3.grid(row=rown, column=0, columnspan=3, sticky="w",padx=4, pady=4)
+                            self.Chatbotlabel3=CTkLabel(self, text=lindetails)  
+                            self.Chatbotlabel3.grid(row=rown, column=1)            
+                            my_image = CTkImage(light_image=Image.open('C:/HealthCheck/chatbotui/verify.gif'),	dark_image=Image.open('C:/HealthCheck/chatbotui/verify.gif'),	size=(20,20))
+                            self.my_label = CTkLabel(self, text="", image=my_image)
+                            self.my_label.grid(row=rown, column=2)
+                            
+                   def AlertForm(rowno):
+                            print("SKVV FN ALERT CALL : ")
+                            frow=formrow
+                            self.seperationframe3 = CTkFrame(self, height = 40,width=690, corner_radius=0)
+                            self.seperationframe3.grid(row=rowno, column=0, columnspan=3, sticky="w",padx=4, pady=4)
+                            self.Chatbotlabel3=CTkLabel(self, text=line)  
+                            self.Chatbotlabel3.grid(row=rowno, column=1)            
+                            my_image = CTkImage(light_image=Image.open('C:/HealthCheck/chatbotui/Alert.jpg'),	dark_image=Image.open('C:/HealthCheck/chatbotui/Alert.jpg'),	size=(20,20))
+                            #self.my_label = CTkLabel(self, text="Fix", image=my_image)
+                            #self.my_label.grid(row=formrow, column=2)
+                            #self.my_label = CTkLabel(self, text="Fix", image=my_image)
+                            
+                            self.my_button=CTkButton(self, text="Fix Error", font=("Aptos", 10, "bold"), command= lambda: fix_issue(rowno))
+                            self.my_button.grid(row=rowno, column=2)
+                            
+                   def fix_issue(i):
+                            print("RNUM in alert :")
+                            print(i)
+                            print(f"Fixing issue {i}")
+                            #print(f"fix{index}()")
+                            if(i == 1):
+                                fix1()
+                            elif(i == 2):
+                                fix2()
+                            elif(i == 3):
+                                fix3()
+                            elif(i == 4):
+                                fix4()
+                            elif(i == 5):
+                                fix5()
+                            else:
+                                fix6()
+                            #After corrected to verify
+                            VerifyForm(i)
+                            
+                   def VerifyForm1(rown):
+                            print("SKV-ROWNUM in verify :")
+                            print(rown)
+                            
+                            self.seperationframe3 = CTkFrame(self, height = 40,width=690, corner_radius=0)
+                            self.seperationframe3.grid(row=rown, column=0, columnspan=3, sticky="w",padx=4, pady=4)
+                            self.Chatbotlabel3=CTkLabel(self, text=line)  
+                            self.Chatbotlabel3.grid(row=rown, column=1)            
+                            my_image = CTkImage(light_image=Image.open('C:/HealthCheck/chatbotui/verify.gif'),	dark_image=Image.open('C:/HealthCheck/chatbotui/verify.gif'),	size=(20,20))
+                            self.my_label = CTkLabel(self, text="", image=my_image)
+                            self.my_label.grid(row=rown, column=2)
+                   
+                   while line:
+                      #print(line, end='')
+                      line = file.readline()
+                      #START1
+                      i+=1
+                      if i<7:
+                          print("TRIGGER VALUE : ")
+                          print(data_into_list[j])
+
+                          ###Verify/Correct fn 
+                          if data_into_list[j] != "False":
+                            AlertForm(formrow)
+                          else:  
+                            VerifyForm1(formrow)  
+
+                          #my_label.pack(pady=10)
+                          formrow=formrow+1
+                          j=j+1
+                          
+                              
+            
+            
+            
+                
+            ################END##################
+            
+            
+
+            self.seperationframe2 = CTkFrame(self, height = 40,width=690, corner_radius=0)
+            self.seperationframe2.grid(row=formrow, column=0, columnspan=4, sticky="ew",padx=10, pady=10)
+            
+            self.Chatbotlabel2=CTkLabel(self, text="Run Chatbot", font=("Montserrat", 18))  
+            self.Chatbotlabel2.grid(row=formrow, column=0, sticky="")
+            
+            self.Chatbotbutton2=CTkButton(self, text="Run", command=self.open, fg_color="#f8f9f9", hover_color="white", font=("Montserrat", 18, "bold"), corner_radius=12)  
+            self.Chatbotbutton2.grid(row=formrow, column=2, columnspan=2)
+            formrow=formrow+1            
+        else:
+            self.healthLabel=CTkLabel(self, text="Run Health Check", fg_color="#f8f9f9", font=("Montserrat", 18))  
+            self.healthLabel.grid(row=formrow, column=0, sticky="")
+            self.healthLabelbutton=CTkButton(self, text="Run",command=starthealthcheck, fg_color="#f8f9f9", hover_color="white", font=("Montserrat", 18, "bold"), corner_radius=12)  
+            self.healthLabelbutton.grid(row=formrow, column=2, columnspan=2)
+            formrow=formrow+1
+            
+
+            self.seperationframe2 = CTkFrame(self, height = 40,width=690, corner_radius=0)
+            self.seperationframe2.grid(row=formrow, column=0, columnspan=4, sticky="w",padx=10, pady=10)
+
+            self.Chatbotlabel=CTkLabel(self, text="Run Chatbot", fg_color="#f8f9f9", font=("Montserrat", 18))  
+            self.Chatbotlabel.grid(row=formrow, column=0, sticky="")
+            
+            
+            self.Chatbotbutton=CTkButton(self, text="Run", command=self.open, fg_color="#f8f9f9", hover_color="white", font=("Montserrat", 18, "bold"), corner_radius=12)  
+            self.Chatbotbutton.grid(row=formrow, column=2, columnspan=2)            
+            formrow=formrow+1
+            
+        if arg1 == "rerun":
+            print("FINAL TEST RERUN :")
+            print(arg1)
+            self.frame = tkinterweb.HtmlFrame(self)
+            url = "C:/HealthCheck/chatbotui/testbot.html"
+            self.frame.load_file(url)
+            self.frame.grid(row=formrow, column=0, columnspan=4) 
+            '''
+            self.button = CTkButton(
+            self, text="Blogs", #Text to be displayed
+            fg_color="#ec3642", #color of the button
+            hover_color="white", #color of the button when mouse is over
+            font=("Montserrat", 16), #font used
+            corner_radius=12, width=100, #radius of edges and total width
+            command=self.open) #Command to run when button is clicked
+            self.button.pack(padx = 10, pady = 10)
+            '''
+            
+    def open(self):
+        print("argument: ")
+        print(arg1)
+        strc2="completed"
+        strc1="start"
+        strc3="rerun"
+        
+        if ((arg1 == strc2) or (arg1 == strc3)):
+            print("string compare - process")
+            print(strc2)
+            import subprocess
+            #filepath1="C:/HealthCheck/chatbotui/xyz.bat"
+            #proc = subprocess.Popen(filepath1, shell=True)
+            subprocess.run(['python', 'C:/HealthCheck/chatbotui/process.py', strc3])
+            '''
+            self.seperationframe3.grid_forget()
+            self.Chatbotlabel3.grid_forget()
+            self.seperationframe1.grid_forget()
+            self.seperationframe3.grid_remove()
+            self.Chatbotlabel3.grid_remove()
+            self.seperationframe1.grid_remove()
+            self.WelcomeLabel.grid_forget()
+            '''
+            self.frame = tkinterweb.HtmlFrame(self)
+            #self.frame.load_website("www.google.com")
+            #self.frame.load_url("C:/HealthCheck/chatbotui/test1.html")
+            #url = "file://d/testdata.html"
+            #self.frame.load_website("file://C:/HealthCheck/chatbotui/test1.html")
+            #url = "https://cloud.yellow.ai/pwa/v2/live/x1655212785966"
+            url = "C:/HealthCheck/chatbotui/testbot.html"
+            self.frame.load_file(url)
+            self.frame.grid(row=formrow, column=0, columnspan=4)
+        else:
+            self.frame = tkinterweb.HtmlFrame(self)
+            #self.frame.load_website("www.google.com")
+            #self.frame.load_url("C:/HealthCheck/chatbotui/test1.html")
+            #url = "file://d/testdata.html"
+            #self.frame.load_website("file://C:/HealthCheck/chatbotui/test1.html")
+            #url = "https://cloud.yellow.ai/pwa/v2/live/x1655212785966"
+            url = "C:/HealthCheck/chatbotui/testbot.html"
+            self.frame.load_file(url)
+            self.frame.grid(row=formrow, column=0, columnspan=4)    
+                
+        
+    def open_bkp1(self):
+        self.frame = tkinterweb.HtmlFrame(self)    
+        #self.frame.load_website('www.google.com')
+        #self.frame.load_website('https://cloud.yellow.ai/pwa/v2/live/x1655212785966')
+        #self.frame.html_label = HTMLText(self, html=RenderHTML('C:/HealthCheck/chatbotui/test1.html'))
+        #self.frame.load_website("http://tkhtml.tcl.tk/tkhtml.html")
+        self.frame.load_website("https://cloud.yellow.ai/pwa/v2/live/x1655212785966")
+        self.frame.grid(row=4, column=0)
+        #self.frame.pack(fill="both", expand=True)
+
+HealthItemsCollection=['Operating System Up-to-Date', 'Reboot Status', 'Outlook Is In Offline Mode', 'Encryption Status', 'AD Password Expiration', 'Low Available Disk Space']
+
+
+def fix1():
+    print("Fixing000000")
+    messagebox.showinfo("Info", HealthItemsCollection[0] + " corrected" )
+#wip
+def fix2():
+    messagebox.showinfo("Reboot Status", "We suggest that you reboot your device to ensure better device performance")
+    
+def fix3():
+    result = messagebox.askyesno("Outlook Is In Offline Mode", "Outlook has been detected to be in offline mode. You may miss some important emails. Would you like to bring it online?")
+    if result:
+        print("run outlook online fix")
+        # Simulate running the Outlook online fix
+        # Note: This part would require additional libraries to interact with Outlook        
+    
+
+def fix4():
+    messagebox.showinfo("Info", HealthItemsCollection[3])
+
+def fix5():
+    result = messagebox.askyesno("AD Password Expiration", "You should change your password as it is about to expire soon. Would you like to change your password?")
+    if result:
+        print("run cleanup script")
+        webbrowser.open("https://passwordreset.microsoftonline.com/")
+    
+
+def fix6():
+    result = messagebox.askyesno("Low Available Disk Space", "Found low disk space. Shall we run a script to clean-Up space?")
+    if result:
+        print("run cleanup script")
+        try:
+            shutil.rmtree("C:\\Temp\\", ignore_errors=True)
+            shutil.rmtree(os.getenv("TEMP"), ignore_errors=True)
+        except Exception as e:
+            print(f"Error: {e}")
+        
+    
+arg1 = sys.argv[1] 
+varnum = 1
+if arg1 != "start":
+    print("To Process")
+    app = App()
+    app.mainloop()        
+else:
+    app = App()
+    app.mainloop()
+    
+
